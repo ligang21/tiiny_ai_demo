@@ -1,0 +1,14 @@
+.header {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #ececec;
+  background: #fff;
+}
+
+.header-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #171717;
+}
