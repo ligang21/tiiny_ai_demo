@@ -105,15 +105,14 @@ export default function App() {
     );
 
     try {
-      const res = await fetch("http://localhost:8080/completion", {
+      const res = await fetch("http://192.168.100.2:11434/api/generate", { //192.168.100.2 is the ip addr of AI box
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          model: "smallthinker",
           prompt,
-          n_predict: 200,
-          temperature: 0.2,
           stream: true,
         }),
       });
@@ -130,14 +129,14 @@ export default function App() {
         const lines = chunk.split("\n").filter(Boolean);
 
         for (const line of lines) {
-          if (!line.startsWith("data:")) continue;
+          // if (!line.startsWith("data:")) continue;
           // every line looks like "data: {}", need to remove "data: " otherwise JSON.parse will fail
-          const payload = line.replace(/^data:\s*/, "");
+          // const payload = line.replace(/^data:\s*/, "");
 
           try {
-            const json = JSON.parse(payload);
-            if (json.content) {
-              assistantBufferRef.current += json.content; // use useRef to avoid disordered tokens
+            const json = JSON.parse(line);
+            if (json.response) {
+              assistantBufferRef.current += json.response; // use useRef to avoid disordered tokens
 
               // Throttle with requestAnimationFrame: update at ~60fps for smooth streaming
               if (updateTimerRef.current) {
